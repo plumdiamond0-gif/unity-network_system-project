@@ -15,7 +15,7 @@ Photon의 네트워크 상태를 알려주는 열거형(enum)이다.
 |ConnectedToMasterServer :	<br />Master Server 연결 완료|JoinedLobby	 : <br />로비 입장 완료|Joining : <br />방 입장 중|
 |Joined : <br />방 입장 완료|Leaving : <br />방에서 나가는 중||
 
-
+ex(현재 상태를 확인한 후 작업을 수행할 때)
 
 ###### \-----------------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ Photon의 네트워크 상태를 알려주는 열거형(enum)이다.
 
 Photon에 접속하면 서버는 모든 플레이어를 Player 객체로 관리하는데, 그중 내 자신을 가리키는 것이 LocalPlayer
 
-ex(플레이어 이름을 표시할 때)
+
 
 ###### \-----------------------------------------------------------------------------------------
 
@@ -47,7 +47,63 @@ ex(플레이어 이름을 표시할 때)
 
 ###### **PhotonNetwork.CountOfPlayersInRooms :**
 
-**재 방(Room)에 들어가 있는 플레이어 수**
+**현재 방(Room)에 들어가 있는 플레이어 수**
+
+
+
+###### \-----------------------------------------------------------------------------------------
+
+
+
+###### **PhotonNetwork.CurrentRoom  :**
+
+현재 내가 들어가 있는 방(Room) 객체
+
+
+
+
+
+자주 사용하는 속성
+
+|방 이름<br />PhotonNetwork.CurrentRoom.Name|현재 인원<br />PhotonNetwork.CurrentRoom.PlayerCount|최대 인원<br />PhotonNetwork.CurrentRoom.MaxPlayers|
+|-|-|-|
+|입장 가능 여부<br />PhotonNetwork.CurrentRoom.IsOpen|로비에 표시할지 여부<br />PhotonNetwork.CurrentRoom.IsVisible||
+
+
+
+###### \-----------------------------------------------------------------------------------------
+
+
+
+###### **PhotonNetwork.PlayerList :** 
+
+현재 방에 있는 모든 플레이어 목록
+
+###### \-----------------------------------------------------------------------------------------
+
+
+
+###### **PhotonNetwork.NickName :** 
+
+내 닉네임
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

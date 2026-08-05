@@ -8,43 +8,43 @@ using TMPro;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    [Header("DisconnectPanel")]
+    [Header("ConnectPanel")]
     public InputField NickNameInput;
 
     [Header("LobbyPanel")]
     public GameObject LobbyPanel;
     public InputField RoomInput;
-    public Text WelcomeText;
-    public Text LobbyInfoText;
+    public TMP_Text WelcomeText;
+    public TMP_Text LobbyInfoText;
     public Button[] CellBtn;
     public Button PreviousBtn;
     public Button NextBtn;
 
     [Header("RoomPanel")]
     public GameObject RoomPanel;
-    public Text ListText;
-    public Text RoomInfoText;
-    public Text[] ChatText;
+    public TMP_Text ListText;
+    public TMP_Text RoomInfoText;
+    public TMP_Text[] ChatText;
     public InputField ChatInput;
 
     [Header("ETC")]
-    public Text StatusText;
+    public TMP_Text StatusText;
     public PhotonView PV;
 
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
 
     #region 방리스트 갱신
-    void MoveList(bool isNext)
+    public void MoveList(bool isNext)
     {
         currentPage = isNext ? currentPage++ : currentPage--;
-        MyListUpdate();
+        ListUpdate();
     }
-    void ListClick(int num)
+    public void ListClick(int num)
     {
         PhotonNetwork.JoinRoom(myList[multiple + num].Name);
     }
-    void MyListUpdate()
+    public void ListUpdate()
     {
         maxPage = (myList.Count % CellBtn.Length == 0) ?
             myList.Count / CellBtn.Length : 
@@ -56,9 +56,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < CellBtn.Length; i++)
         {
             CellBtn[i].interactable = (multiple + i < myList.Count) ? true : false;
-            CellBtn[i].transform.GetChild(0).GetComponent<Text>().text =
+            CellBtn[i].transform.GetChild(0).GetComponent<TMP_Text>().text =
                 (multiple + i < myList.Count) ? myList[multiple + i].Name : "";
-            CellBtn[i].transform.GetChild(1).GetComponent<Text>().text =
+            CellBtn[i].transform.GetChild(1).GetComponent<TMP_Text>().text =
                 (multiple + i < myList.Count) ? myList[multiple + i].PlayerCount + "/"
                 + myList[multiple + i].MaxPlayers : "";
         }
@@ -76,19 +76,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             else if(myList.IndexOf(roomList[i]) != -1)
                 myList.RemoveAt(myList.IndexOf(roomList[i]));
         }
-        MyListUpdate();
+        ListUpdate();
     }
     #endregion
 
     #region 서버연결
-    void Awake() => Screen.SetResolution(960, 540, false);
+    void Awake() 
+    {
+        Screen.SetResolution(960, 540, false);
+    } 
 
     void Update() 
     {
         StatusText.text = PhotonNetwork.NetworkClientState.ToString();
         LobbyInfoText.text =
             $"{PhotonNetwork.CountOfPlayers - PhotonNetwork.CountOfPlayersInRooms}" +
-            $"로비 / {PhotonNetwork.CountOfPlayers} + 접속";
+            $"Lobby / {PhotonNetwork.CountOfPlayers} Online";
     }
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
@@ -98,7 +101,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         LobbyPanel.SetActive(true);
         RoomPanel.SetActive(false);
         PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
-        WelcomeText.text = PhotonNetwork.LocalPlayer.NickName + "님 환영합니다";
+        WelcomeText.text = "Welcome, " + PhotonNetwork.LocalPlayer.NickName;
         myList.Clear();
     }
     public void Disconnect() => PhotonNetwork.Disconnect();
@@ -150,8 +153,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 ((i + 1 == PhotonNetwork.PlayerList.Length) ? 
                 "" : ", ");
         RoomInfoText.text = PhotonNetwork.CurrentRoom.Name +
-            " / " + PhotonNetwork.CurrentRoom.PlayerCount + 
-            "명 / " + PhotonNetwork.CurrentRoom.MaxPlayers + "최대";
+            " / " + "Now : " + PhotonNetwork.CurrentRoom.PlayerCount + " / " +
+            "Max : " + PhotonNetwork.CurrentRoom.MaxPlayers;
     }
     #endregion
 

@@ -1,0 +1,69 @@
+방 리스트
+
+스크롤
+
+public void ListUpdate()
+{
+    maxPage = (myList.Count % CellBtn.Length == 0) ?
+        myList.Count / CellBtn.Length : 
+        myList.Count / CellBtn.Length + 1;
+//예 : 현재 방 수 : 26개, 셀 버튼 수 : 4 
+//26 % 4 = 6, 나머지 2개의 방을 담을 페이지도 필요하므로 1 더함.
+
+    PreviousBtn.interactable = (currentPage <= 1) ? false : true;
+    NextBtn.interactable = (currentPage >= maxPage) ? false : true;
+
+    multiple = (currentPage - 1) * CellBtn.Length;
+//multiple : 현재 페이지의 첫번째 방이 전체 리스트 항목들 중에서 몇번째인지
+    for (int i = 0; i < CellBtn.Length; i++)
+    {
+        CellBtn[i].interactable = (multiple + i < myList.Count) ? true : false;
+//현재 페이지의 셀들 중에서 방 리스트 항목들의 수보다 많은 번째의 셀이 있는지 확인
+        CellBtn[i].transform.GetChild(0).GetComponent<TMP_Text>().text =
+            (multiple + i < myList.Count) ? myList[multiple + i].Name : "";
+        CellBtn[i].transform.GetChild(1).GetComponent<TMP_Text>().text =
+            (multiple + i < myList.Count) ? myList[multiple + i].PlayerCount + "/"
+            + myList[multiple + i].MaxPlayers : "";
+    }
+}
+
+
+
+
+
+
+
+public override void OnRoomListUpdate(List<RoomInfo> roomList)
+{
+    int roomCount = roomList.Count;
+    for (int i = 0; i < roomCount; i++)
+    {
+        if (!roomList[i].RemovedFromList)
+//제거되지 않은 방이라면
+        {
+            if (!myList.Contains(roomList[i])) myList.Add(roomList[i]);
+//추가된 방의 경우 리스트에 추가
+            else myList[myList.IndexOf(roomList[i])] = roomList[i];
+//정보가 바뀐 방의 경우 바뀐 정보로 갱신
+        }
+        else if(myList.IndexOf(roomList[i]) != -1)
+//제거된 방이고 아직 방 리스트에 남아있다면
+            myList.RemoveAt(myList.IndexOf(roomList[i]));
+//제거
+    }
+    ListUpdate();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
