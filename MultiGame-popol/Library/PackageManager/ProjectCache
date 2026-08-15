@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 639212550399644428
-    m_Hash: 886958215
+      ticks: 639223822706316876
+    m_Hash: 2213226430
   m_LockFileStatus:
     m_FilePath: C:/Users/plumd/Desktop/popol/unity-network_system-project/MultiGame-popol/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 639212550539243101
-    m_Hash: 673815635
+      ticks: 639223822706363372
+    m_Hash: 2986147795
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -22,6 +22,86 @@ m_LocalPackages:
 m_ProjectPath: C:/Users/plumd/Desktop/popol/unity-network_system-project/MultiGame-popol/Packages
 m_EditorVersion: 6000.2.10f1 (d3d30d158480)
 m_ResolvedPackages:
+- packageId: com.unity.2d.sprite@1.0.0
+  testable: 0
+  isDirectDependency: 1
+  version: 1.0.0
+  source: 2
+  resolvedPath: C:\Users\plumd\Desktop\popol\unity-network_system-project\MultiGame-popol\Library\PackageCache\com.unity.2d.sprite@331abd9a1e2f
+  assetPath: Packages/com.unity.2d.sprite
+  name: com.unity.2d.sprite
+  displayName: 2D Sprite
+  author:
+    name: 
+    email: 
+    url: 
+  category: 2D
+  type: 
+  description: Use Unity Sprite Editor Window to create and edit Sprite asset properties
+    like pivot, borders and Physics shape
+  errors: []
+  versions:
+    all:
+    - 1.0.0
+    compatible:
+    - 1.0.0
+    recommended: 1.0.0
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords:
+  - 2d
+  - sprite
+  - sprite editor window
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+    compliance:
+      status: 0
+      violations: []
+  hideInEditor: 1
+  entitlements:
+    licensingModel: 0
+  isAssetStorePackage: 0
+  datePublishedTicks: 0
+  documentationUrl: 
+  hasRepository: 0
+  repository:
+    type: 
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 1.0.0
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+    isDiscoverable: 1
+  isDeprecated: 0
+  deprecationMessage: 
+  git:
+    hash: 
+    revision: 
+  upmReserved: 
+  assetStore:
+    productId: 
+  fingerprint: 331abd9a1e2ff424a1ef2626e16936071ab7ce3d
+  editorCompatibility:
+    compatibilityLevel: 0
+    minimumPackageVersion: 1.0.0
+    minimumUnityVersion: 2019.2.0a1
+  compliance:
+    status: 0
+    violation:
+      scopePatternExpression: 
+      message: 
+      readMoreLink: 
 - packageId: com.unity.collab-proxy@2.10.0
   testable: 0
   isDirectDependency: 1
@@ -135,6 +215,7 @@ m_ResolvedPackages:
     - 2.13.3
     - 2.13.4
     - 2.13.5
+    - 2.13.6
     compatible:
     - 2.10.0
     - 2.10.1
@@ -146,6 +227,7 @@ m_ResolvedPackages:
     - 2.13.3
     - 2.13.4
     - 2.13.5
+    - 2.13.6
     recommended: 2.10.2
     deprecated: []
   dependencies: []
@@ -718,12 +800,14 @@ m_ResolvedPackages:
     - 1.8.10
     - 1.8.11
     - 1.8.12
+    - 1.8.13
     compatible:
     - 1.8.9
     - 1.8.10
     - 1.8.11
     - 1.8.12
-    recommended: 1.8.12
+    - 1.8.13
+    recommended: 1.8.13
     deprecated: []
   dependencies:
   - name: com.unity.modules.audio
