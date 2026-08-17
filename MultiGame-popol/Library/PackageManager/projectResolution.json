@@ -19,6 +19,16 @@
       "source": "builtin",
       "testable": false
     },
+    "com.unity.2d.tilemap@1.0.0": {
+      "name": "com.unity.2d.tilemap",
+      "displayName": "2D Tilemap Editor",
+      "resolvedPath": "C:\\Users\\plumd\\Desktop\\popol\\unity-network_system-project\\MultiGame-popol\\Library\\PackageCache\\com.unity.2d.tilemap@0b99f08c0204",
+      "fingerprint": "0b99f08c02048105e3f87c2e1f97bcf4c860dae8",
+      "editorCompatibility": "2019.2.0a1",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
     "com.unity.collab-proxy@2.10.0": {
       "name": "com.unity.collab-proxy",
       "displayName": "Unity Version Control",
