@@ -5,9 +5,16 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static NetworkManager Instance;
+
     [Header("ConnectPanel")]
     public InputField NickNameInput;
 
@@ -22,7 +29,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     [Header("RoomPanel")]
     public GameObject RoomPanel;
-    public TMP_Text ListText;
     public TMP_Text RoomInfoText;
     public TMP_Text[] ChatText;
     public InputField ChatInput;
@@ -33,6 +39,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
+
+    [System.Serializable]
+    public class PlayerInfos
+    {
+        public TMP_Text PlayerName;
+        public UnityEngine.UI.Image PlayerImage;
+    }
+    public List<PlayerInfos> playerInfos = new();
+    Character myCharacter;
 
     #region 방리스트 갱신
     public void MoveList(bool isNext)
@@ -47,7 +62,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ListUpdate()
     {
         maxPage = (myList.Count % CellBtn.Length == 0) ?
-            myList.Count / CellBtn.Length : 
+            myList.Count / CellBtn.Length :
             myList.Count / CellBtn.Length + 1;
         PreviousBtn.interactable = (currentPage <= 1) ? false : true;
         NextBtn.interactable = (currentPage >= maxPage) ? false : true;
@@ -73,7 +88,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 if (!myList.Contains(roomList[i])) myList.Add(roomList[i]);
                 else myList[myList.IndexOf(roomList[i])] = roomList[i];
             }
-            else if(myList.IndexOf(roomList[i]) != -1)
+            else if (myList.IndexOf(roomList[i]) != -1)
                 myList.RemoveAt(myList.IndexOf(roomList[i]));
         }
         ListUpdate();
@@ -81,12 +96,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region 서버연결
-    void Awake() 
+    void Awake()
     {
         Screen.SetResolution(960, 540, false);
-    } 
+    }
 
-    void Update() 
+    void Update()
     {
         StatusText.text = PhotonNetwork.NetworkClientState.ToString();
         LobbyInfoText.text =
@@ -115,7 +130,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         (RoomInput.text == "" ?
         "Room" + Random.Range(0, 100) :
         RoomInput.text
-        ,new RoomOptions { MaxPlayers = 4 });
+        , new RoomOptions { MaxPlayers = 2 });
     }
     public void JoinRoom() => PhotonNetwork.JoinRoom(RoomInput.text);
     public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
@@ -147,11 +162,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void RoomUpdate()
     {
-        ListText.text = "";
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-            ListText.text += PhotonNetwork.PlayerList[i].NickName + 
-                ((i + 1 == PhotonNetwork.PlayerList.Length) ? 
-                "" : ", ");
+        for (int i = 0; i < playerInfos.Count; i++)
+        {
+            playerInfos[i].PlayerName.text = PhotonNetwork.PlayerList[i].NickName;
+
+            if (PhotonNetwork.PlayerList[i].CustomProperties["Character"] == null)
+                return; //아직 캐릭터 선택 안 함
+
+            string name = (string)PhotonNetwork.PlayerList[i].CustomProperties["Character"];
+            foreach (var item in PrefabManager.instance.characterInfo.list)
+            {
+                if (name == item.Name)
+                    playerInfos[i].PlayerImage.sprite = item.Image;
+            }
+        }
+        //NameList.text = "";
+        //for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        //    ListText.text += PhotonNetwork.PlayerList[i].NickName +
+        //        ((i + 1 == PhotonNetwork.PlayerList.Length) ?
+        //        "" : ", ");
         RoomInfoText.text = PhotonNetwork.CurrentRoom.Name +
             " / " + "Now : " + PhotonNetwork.CurrentRoom.PlayerCount + " / " +
             "Max : " + PhotonNetwork.CurrentRoom.MaxPlayers;
@@ -161,7 +190,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region 채팅
     public void Send()
     {
-        PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName + 
+        PV.RPC("ChatRPC", RpcTarget.All, PhotonNetwork.NickName +
             " : " + ChatInput.text);
         ChatInput.text = "";
     }
@@ -178,7 +207,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
         if (!isInput) // 꽉차면 한칸씩 위로 올림
         {
-            for (int i = 1; i < ChatText.Length; i++) 
+            for (int i = 1; i < ChatText.Length; i++)
                 ChatText[i - 1].text = ChatText[i].text;
             ChatText[ChatText.Length - 1].text = msg;
         }
@@ -207,4 +236,39 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             print("연결됐는지? : " + PhotonNetwork.IsConnected);
         }
     }
+
+    public void GameStart()
+    {
+        //if (!(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers))
+        //    return;
+        SceneManager.LoadScene("PuzzleScene");
+    }
+    public void SelectCharacter(string name)
+    {
+        Hashtable hash = new Hashtable();   
+        hash["Character"] = name;
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        foreach (var item in PrefabManager.instance.characterInfo.list)
+        {
+            if (name == item.Name)
+                myCharacter = item;
+        }
+        for (int i = 0; i < playerInfos.Count; i++)
+        {
+            if (playerInfos[i].PlayerName.text == PhotonNetwork.LocalPlayer.NickName)
+            {
+                playerInfos[i].PlayerImage.gameObject.SetActive(true);
+                playerInfos[i].PlayerImage.sprite = myCharacter.Image;
+            }
+        }
+    }
+
+    public void AAALog()
+    {
+        Debug.Log(PhotonNetwork.LocalPlayer.NickName);
+        Debug.Log(myCharacter.Name);
+    }
+
 }

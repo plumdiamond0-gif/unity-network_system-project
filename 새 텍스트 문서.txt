@@ -1,0 +1,45 @@
+커스텀 프로퍼티
+Photon 서버에 저장해두는 "플레이어 또는 방의 추가 정보
+사용자가 원하는 데이터를 저장할 수 있는 공간
+
+Photon은 기본적으로 네가 만든 게임의 정보를 알 수 없어.
+
+
+저장한 데이터를 가져올 때는:
+object value =
+    PhotonNetwork.LocalPlayer.CustomProperties["CharacterID"];
+그런데 CustomProperties의 Value는 object라서 형변환을 해주는 게 일반적
+
+
+
+
+Player Custom Properties
+PhotonNetwork.LocalPlayer.CustomProperties
+
+플레이어 개인 정보
+
+예:
+
+CharacterID
+SkinID
+Ready
+Team
+Room Custom Properties
+PhotonNetwork.CurrentRoom.CustomProperties
+
+방 전체가 공유하는 정보
+
+예:
+
+GameMode = "Coop"
+MapID = 3
+Difficulty = 2
+
+즉:
+
+Player Properties
+→ "누가 무엇을 선택했나?"
+
+
+Room Properties
+→ "이 방은 어떤 게임을 하고 있나?"
